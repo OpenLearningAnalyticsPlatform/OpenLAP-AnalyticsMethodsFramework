@@ -7,6 +7,10 @@ public abstract class AbstractAnalyticsMethod {
     Boolean isPredictive;
     public abstract String sayHi();
 
+    public AbstractAnalyticsMethod() {
+        this.isPredictive = false;
+    }
+
     public AbstractAnalyticsMethod(Boolean isPredictive) {
         this.isPredictive = isPredictive;
     }
