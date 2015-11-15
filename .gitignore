@@ -1,0 +1,15 @@
+# Created by https://www.gitignore.io/api/intellij,linux
+
+### Intellij ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
+
+*.iml
+
+## Directory-based project format:
+.idea/
+
+# IntelliJ
+/out/
+
+# Sources from Spring
+/target
