@@ -8,6 +8,22 @@
     <artifactId>AnalyticsMethodsFramework</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.OpenLearningAnalyticsPlatform</groupId>
+            <artifactId>OLAPDataSet</artifactId>
+            <version>v1.0</version>
+        </dependency>
+    </dependencies>
+
+
     <build>
         <plugins>
             <plugin>
