@@ -12,14 +12,14 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
 
     public AnalyticsMethodsTestImplementation()
     {
-        this.input = new OLAPDataSet();
-        this.output = new OLAPDataSet();
+        this.setInput(new OLAPDataSet());
+        this.setOutput(new OLAPDataSet());
 
         try {
-            this.input.addOLAPDataColumn(
+            this.getInput().addOLAPDataColumn(
                     OLAPDataColumnFactory.createOLAPDataColumnOfType("inputColumn1",OLAPColumnDataType.STRING, true)
             );
-            this.output.addOLAPDataColumn(
+            this.getInput().addOLAPDataColumn(
                     OLAPDataColumnFactory.createOLAPDataColumnOfType("outputColumn1",OLAPColumnDataType.INTEGER, true)
             );
         } catch (OLAPDataColumnException e) {

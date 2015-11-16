@@ -9,9 +9,9 @@ import java.util.List;
  * Created by lechip on 15/11/15.
  */
 public abstract class AnalyticsMethod {
-    protected OLAPDataSet input;
-    protected OLAPDataSet output;
-    protected Boolean isPredictive;
+    private OLAPDataSet input;
+    private OLAPDataSet output;
+    private Boolean isPredictive;
 
     public OLAPDataSet execute(){
         implementationExecution(output);
@@ -53,5 +53,21 @@ public abstract class AnalyticsMethod {
 
     public OLAPDataSet getOutput() {
         return output;
+    }
+
+    public void setInput(OLAPDataSet input) {
+        this.input = input;
+    }
+
+    public void setOutput(OLAPDataSet output) {
+        this.output = output;
+    }
+
+    public Boolean getPredictive() {
+        return isPredictive;
+    }
+
+    public void setPredictive(Boolean predictive) {
+        isPredictive = predictive;
     }
 }
