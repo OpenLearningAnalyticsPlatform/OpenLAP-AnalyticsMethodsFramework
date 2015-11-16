@@ -1,0 +1,15 @@
+/*
+* Sample of a DataSet
+*/
+{
+  "columns" : {
+    "incomingColumn" : {
+      "configurationData" : {
+        "type" : "STRING",
+        "id" : "incomingColumn",
+        "required" : false
+      },
+      "data" : [ "bananito", "abc" ]
+    }
+  }
+}

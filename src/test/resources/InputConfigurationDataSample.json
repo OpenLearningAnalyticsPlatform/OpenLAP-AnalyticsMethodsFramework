@@ -1,0 +1,5 @@
+[ {
+  "type" : "STRING",
+  "id" : "inputColumn1",
+  "required" : true
+} ]

@@ -1,0 +1,15 @@
+/*
+* Sample of a DataSet
+*/
+{
+  "columns" : {
+    "outputColumn1" : {
+      "configurationData" : {
+        "type" : "INTEGER",
+        "id" : "outputColumn1",
+        "required" : true
+      },
+      "data" : [ 8, 3 ]
+    }
+  }
+}
