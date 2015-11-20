@@ -7,7 +7,7 @@
       "configurationData" : {
         "type" : "INTEGER",
         "id" : "outputColumn1",
-        "required" : true
+        "required" : false
       },
       "data" : [ 8, 3 ]
     }

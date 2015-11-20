@@ -19,8 +19,8 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
             this.getInput().addOLAPDataColumn(
                     OLAPDataColumnFactory.createOLAPDataColumnOfType("inputColumn1",OLAPColumnDataType.STRING, true)
             );
-            this.getInput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("outputColumn1",OLAPColumnDataType.INTEGER, true)
+            this.getOutput().addOLAPDataColumn(
+                    OLAPDataColumnFactory.createOLAPDataColumnOfType("outputColumn1",OLAPColumnDataType.INTEGER, false)
             );
         } catch (OLAPDataColumnException e) {
             e.printStackTrace();

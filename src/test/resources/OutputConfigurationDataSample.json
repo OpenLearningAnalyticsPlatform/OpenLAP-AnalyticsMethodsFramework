@@ -1,5 +1,5 @@
 [ {
   "type" : "INTEGER",
   "id" : "outputColumn1",
-  "required" : true
+  "required" : false
 } ]
