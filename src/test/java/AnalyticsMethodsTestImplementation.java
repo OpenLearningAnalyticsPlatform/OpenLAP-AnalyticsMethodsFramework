@@ -42,4 +42,9 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
         }
         output.getColumns().get("outputColumn1").setData(outputData);
     }
+
+    @Override
+    public Boolean hasPMML() {
+        return false;
+    }
 }
