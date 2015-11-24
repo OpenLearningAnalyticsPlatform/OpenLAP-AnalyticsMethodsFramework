@@ -85,4 +85,11 @@ public class AnalyticsMethodFrameworkTests {
         Assert.assertEquals(expectedOutPutDataset,testMethod1.execute());
     }
 
+    //Test PMML
+    @Test
+    public void testPMMLLoading()throws Exception{
+        Assert.assertTrue(testMethod1.hasPMML());
+        Assert.assertNotNull(testMethod1.getPMMLInputStream());
+    }
+
 }

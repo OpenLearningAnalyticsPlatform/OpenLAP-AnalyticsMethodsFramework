@@ -4,6 +4,7 @@ import OLAPDataSet.*;
 import core.exceptions.AnalyticsMethodInitializationException;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ public abstract class AnalyticsMethod {
      * A File handler to the PMML XML
      * @return a {@code File} handler of the PMML XML. Should be null whenever {@code hasPMML() == true}
      */
-    public abstract File getPMMLFile();
+    public abstract InputStream getPMMLInputStream();
 
     /**
      * Gets the {@code OLAPColumnConfigurationData} for the {@code input} OLAPDataSet.

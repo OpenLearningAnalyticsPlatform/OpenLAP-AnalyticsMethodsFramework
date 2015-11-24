@@ -3,6 +3,10 @@ import core.AnalyticsMethod;
 import exceptions.OLAPDataColumnException;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -10,6 +14,8 @@ import java.util.ArrayList;
  */
 public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
 
+
+    private static final String PMML_RESOURCE_PATH = "pmmlXmlExample/single_audit_kmeans.xml";
 
     public AnalyticsMethodsTestImplementation()
     {
@@ -29,11 +35,6 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
     }
 
     @Override
-    public File getPMMLFile() {
-        return null;
-    }
-
-    @Override
     protected void implementationExecution(OLAPDataSet output) {
         ArrayList outputData = new ArrayList<Integer>();
         for (Object word :
@@ -45,6 +46,14 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
 
     @Override
     public Boolean hasPMML() {
-        return false;
+        return true;
     }
+
+    @Override
+    public InputStream getPMMLInputStream() {
+        //URL fileUrl = getClass().getClassLoader().getResource(PMML_RESOURCE_PATH);
+        //return new File(fileUrl.toURI());
+        return getClass().getResourceAsStream(PMML_RESOURCE_PATH);
+    }
+
 }
