@@ -2,6 +2,7 @@ import OLAPDataSet.*;
 import core.AnalyticsMethod;
 import exceptions.OLAPDataColumnException;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -25,6 +26,11 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
         } catch (OLAPDataColumnException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public File getPMMLFile() {
+        return null;
     }
 
     @Override

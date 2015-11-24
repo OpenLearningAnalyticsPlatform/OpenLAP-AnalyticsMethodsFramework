@@ -3,6 +3,7 @@ package core;
 import OLAPDataSet.*;
 import core.exceptions.AnalyticsMethodInitializationException;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -11,13 +12,14 @@ import java.util.List;
 public abstract class AnalyticsMethod {
     private OLAPDataSet input;
     private OLAPDataSet output;
-    private Boolean isPredictive;
+    private Boolean hasPMML;
 
     public OLAPDataSet execute(){
         implementationExecution(output);
         return output;
     }
 
+    public abstract File getPMMLFile();
     protected abstract void implementationExecution(OLAPDataSet output);
 
     public List<OLAPColumnConfigurationData> getInputPorts(){
@@ -63,11 +65,11 @@ public abstract class AnalyticsMethod {
         this.output = output;
     }
 
-    public Boolean getPredictive() {
-        return isPredictive;
+    public Boolean getHasPMML() {
+        return hasPMML;
     }
 
-    public void setPredictive(Boolean predictive) {
-        isPredictive = predictive;
+    public void setHasPMML(Boolean hasPMML) {
+        this.hasPMML = hasPMML;
     }
 }
