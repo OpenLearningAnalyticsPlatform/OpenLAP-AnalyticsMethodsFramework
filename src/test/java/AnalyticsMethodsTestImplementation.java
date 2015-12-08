@@ -1,16 +1,14 @@
-import OLAPDataSet.*;
+import DataSet.OLAPColumnDataType;
+import DataSet.OLAPDataColumnFactory;
+import DataSet.OLAPDataSet;
 import core.AnalyticsMethod;
 import exceptions.OLAPDataColumnException;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Created by lechip on 16/11/15.
+ * An implementation for testing
  */
 public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
 

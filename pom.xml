@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.rwth-aachen.olap</groupId>
-    <artifactId>AnalyticsMethodsFramework</artifactId>
+    <artifactId>analytics-methods-framework</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <repositories>
@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.OpenLearningAnalyticsPlatform</groupId>
-            <artifactId>OLAPDataSet</artifactId>
+            <artifactId>OpenLAP-DataSet</artifactId>
             <version>-SNAPSHOT</version>
         </dependency>
         <dependency>

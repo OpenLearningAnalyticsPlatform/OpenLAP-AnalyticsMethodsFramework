@@ -1,6 +1,7 @@
-import OLAPDataSet.*;
+import DataSet.OLAPColumnConfigurationData;
+import DataSet.OLAPDataSet;
+import DataSet.OLAPPortConfiguration;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import core.AnalyticsMethod;
@@ -10,14 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 /**
- * Created by lechip on 16/11/15.
+ * Test for AnalyticsMethodFRamework
  */
 public class AnalyticsMethodFrameworkTests {
 

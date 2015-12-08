@@ -1,9 +1,8 @@
 package core;
 
-import OLAPDataSet.*;
+import DataSet.*;
 import core.exceptions.AnalyticsMethodInitializationException;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -87,14 +86,14 @@ public abstract class AnalyticsMethod {
      */
     public void initialize(OLAPDataSet data, OLAPPortConfiguration configuration)
             throws AnalyticsMethodInitializationException {
-        DataSetConfigurationValidationResult validationResult;
+        OLAPDataSetConfigurationValidationResult validationResult;
         // Check that the configuration
         validationResult =input.validateConfiguration(configuration);
         if (!validationResult.isValid())
         {
             // throw exception if not
             throw new AnalyticsMethodInitializationException(validationResult.getValidationMessage());
-        };
+        }
         // for each configuration element of the configuration
         for (OLAPPortMapping mappingEntry:
              configuration.getMapping()) {
