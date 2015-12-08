@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.rwth-aachen.olap</groupId>
-    <artifactId>analytics-methods-framework</artifactId>
+    <artifactId>openlap-analytics-methods-framework</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <repositories>
