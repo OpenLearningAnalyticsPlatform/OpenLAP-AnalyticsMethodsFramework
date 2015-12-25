@@ -32,7 +32,7 @@ public abstract class AnalyticsMethod {
     /**
      * Main execution for the Analytics Method. Will run {@code implementationExecution(output)}, which should be set
      * internally. This forces the implementation to use the output.
-     * @return {@code OLAPDataSet output} porperty of the Analytics Method.
+     * @return {@code OLAPDataSet output} property of the Analytics Method.
      */
     public OLAPDataSet execute(){
         implementationExecution(output);
