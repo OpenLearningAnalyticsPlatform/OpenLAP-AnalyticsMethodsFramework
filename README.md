@@ -2,10 +2,7 @@
 
 ## INTRODUCTION
 
-The OpenLAP-AnalyticsMethodsFramework provides the API necessary for developers to extend the Analytics Methods macro
-component of the OpenLAP system of the RWTH. This framework consist of the classes that the developer can extend,
-implement, pack and upload to the OpenLAP system to provide new Analytics Methods and make them available to all the 
-users of the OpenLAP.
+The OpenLAP-AnalyticsMethodsFramework contains the necessary classes that the developers can extend, implement, pack in JAR and upload to add new Analytics Methods to the OpenLAP.
 
 ## MOTIVATION
 
