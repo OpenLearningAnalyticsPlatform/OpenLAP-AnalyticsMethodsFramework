@@ -5,7 +5,9 @@
 The OpenLAP-AnalyticsMethodsFramework contains the necessary classes that the developers can extend, implement, pack in JAR and upload to add new Analytics Methods to the OpenLAP. The following video gives the introduction to Open Learning Analytics Platform (OpenLAP) following with the step by step video guide to adding new Analytics Method to OpenLAP.
 
 <p align="center">
-	<a href="http://www.youtube.com/watch?feature=player_embedded&v=9PdU8pQkvLU" target="_blank"><img src="http://img.youtube.com/vi/9PdU8pQkvLU/0.jpg" alt="OpenLAP Introduction and New Analytics Method"/></a>
+	<a href="http://www.youtube.com/watch?feature=player_embedded&v=9PdU8pQkvLU" target="_blank">
+		<img src="http://img.youtube.com/vi/9PdU8pQkvLU/0.jpg" alt="OpenLAP Introduction and New Analytics Method" style="    border: 1px solid gray;"/>
+	</a>
 </p>
 ## MOTIVATION
 
