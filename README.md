@@ -173,10 +173,13 @@ public AnalyticsMethodImplementation()
 
         try {
             this.getInput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("inputColumn1",OLAPColumnDataType.STRING, true)
+                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_name", OLAPColumnDataType.STRING, true, "Items", "List of items to count")
             );
             this.getOutput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("outputColumn1",OLAPColumnDataType.INTEGER, false)
+                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_name", OLAPColumnDataType.STRING, true, "Item Names", "List of top 10 most occuring items in the list")
+            );
+            this.getOutput().addOLAPDataColumn(
+                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_count", OLAPColumnDataType.INTEGER, true, "Item Count", "Number of time each item occured in the list")
             );
         } catch (OLAPDataColumnException e) {
             e.printStackTrace();
@@ -199,12 +202,34 @@ can be seen in the listing below.
 // from the OpenLAP-AnalyticsMethodsFramework.core.AnalyticsMethod
     @Override
     protected void implementationExecution(OLAPDataSet output) {
-        ArrayList outputData = new ArrayList<Integer>();
-        for (Object word :
-                this.getInput().getColumns().get("inputColumn1").getData()) {
-            outputData.add(((String)word).length());
-        }
-        output.getColumns().get("outputColumn1").setData(outputData);
+        LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
+	    // Iterate over each word of the column of the arrays
+	    for (Object word : this.getInput().getColumns().get("item_name").getData()) {
+	        if (itemCount.containsKey(word))
+	            itemCount.put((String) word, itemCount.get((String) word) + 1);
+	        else
+	            itemCount.put((String) word, 1);
+	    }
+	    Set<Map.Entry<String, Integer>> itemCountSet = itemCount.entrySet();
+	    int counter = 10;
+	    if(itemCountSet.size()<10)
+	        counter = itemCountSet.size();
+	    for(;counter>0;counter--){
+	
+	        Iterator<Map.Entry<String, Integer>> itemCountSetIterator = itemCountSet.iterator();
+	
+	        Map.Entry<String, Integer> topEntry = itemCountSetIterator.next();
+	
+	        while (itemCountSetIterator.hasNext()) {
+	            Map.Entry<String, Integer> curEntry = itemCountSetIterator.next();
+	
+	            if (curEntry.getValue() > topEntry.getValue())
+	                topEntry = curEntry;
+	        }
+	        getOutput().getColumns().get("item_name").getData().add(topEntry.getKey());
+	        getOutput().getColumns().get("item_count").getData().add(topEntry.getValue());
+	        itemCountSet.remove(topEntry);
+	    }
     }
 
     @Override
