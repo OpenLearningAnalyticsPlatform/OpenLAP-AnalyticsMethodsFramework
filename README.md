@@ -8,7 +8,7 @@ The OpenLAP-AnalyticsMethodsFramework contains the necessary classes that the de
 	<a href="http://www.youtube.com/watch?feature=player_embedded&v=9PdU8pQkvLU" target="_blank">
 		<img src="http://img.youtube.com/vi/9PdU8pQkvLU/0.jpg" alt="OpenLAP Introduction and New Analytics Method"/>
 		<br>
-		<span>Video Tutorial to add new Analytics Methods to OpenLAP</span>
+		<span><strong>Video Tutorial to add new Analytics Methods to OpenLAP</strong></span>
 	</a>
 </p>
 ## MOTIVATION
