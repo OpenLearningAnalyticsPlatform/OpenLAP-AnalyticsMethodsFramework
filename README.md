@@ -113,9 +113,9 @@ Maven:
 ```xml
 	<dependency>
 	    <groupId>com.github.OpenLearningAnalyticsPlatform</groupId>
-	    <artifactId>AnalyticsMethodsFramework</artifactId>
+	    <artifactId>OpenLAP-AnalyticsMethodsFramework</artifactId>
 	    <version>-SNAPSHOT</version>
-</dependency>
+	</dependency>
 ```
 Gradle:
 ```gradle
