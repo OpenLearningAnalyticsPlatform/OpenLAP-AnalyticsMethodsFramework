@@ -120,7 +120,7 @@ Maven:
 Gradle:
 ```gradle
 dependencies {
-	        compile 'com.github.OpenLearningAnalyticsPlatform:AnalyticsMethodsFramework:-SNAPSHOT'
+	        compile 'com.github.OpenLearningAnalyticsPlatform:OpenLAP-AnalyticsMethodsFramework:-SNAPSHOT'
 }
 ```
 
