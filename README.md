@@ -114,13 +114,13 @@ Maven:
 	<dependency>
 	    <groupId>com.github.OpenLearningAnalyticsPlatform</groupId>
 	    <artifactId>OpenLAP-AnalyticsMethodsFramework</artifactId>
-	    <version>-SNAPSHOT</version>
+	    <version>v2.0</version>
 	</dependency>
 ```
 Gradle:
 ```gradle
 dependencies {
-	        compile 'com.github.OpenLearningAnalyticsPlatform:OpenLAP-AnalyticsMethodsFramework:-SNAPSHOT'
+	        compile 'com.github.OpenLearningAnalyticsPlatform:OpenLAP-AnalyticsMethodsFramework:v2.0'
 }
 ```
 
