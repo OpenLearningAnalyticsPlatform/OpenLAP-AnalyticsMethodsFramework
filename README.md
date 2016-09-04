@@ -23,7 +23,7 @@ The OpenLAP-DataSet is implemented under the class name `OLAPDataSet`. It is a c
 The `AnalyticsMethod` abstract class has a series of methods that allows new classes that extend it to be used by the OpenLAP.
 
 #### Implemented Methods
-* The `initialize()` method takes an `OLAPDataSet` and a `OLAPPortConfiguration` as parameters. The `AnalyticsMethod` will use this as its input `OLAPDataSet` with the incoming data if the `OLAPPortConfiguration` is valid.
+* The `initialize()` method takes an `OLAPDataSet` and an `OLAPPortConfiguration` as parameters. The `AnalyticsMethod` will use this as its input `OLAPDataSet` with the incoming data if the `OLAPPortConfiguration` is valid.
 * The `execute()` method returns the output `OLAPDataSet` after executing the `implementationExecution()` method and performing the analysis. 
 * The `getInputPorts()` and `getOutputPorts()` methods allow other classes to obtain the columns metadata as `OLAPColumnConfigurationData` class of the input and output `OLAPDataSet`.
 
