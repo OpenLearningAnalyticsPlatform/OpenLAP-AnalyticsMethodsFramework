@@ -33,13 +33,13 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
     }
 
     @Override
-    protected void implementationExecution(OLAPDataSet output) {
+    protected void implementationExecution() {
         ArrayList outputData = new ArrayList<Integer>();
         for (Object word :
                 this.getInput().getColumns().get("inputColumn1").getData()) {
             outputData.add(((String)word).length());
         }
-        output.getColumns().get("outputColumn1").setData(outputData);
+        this.getOutput().getColumns().get("outputColumn1").setData(outputData);
     }
 
     @Override

@@ -35,16 +35,15 @@ public abstract class AnalyticsMethod {
      * @return {@code OLAPDataSet output} property of the Analytics Method.
      */
     public OLAPDataSet execute(){
-        implementationExecution(output);
+        implementationExecution();
         return output;
     }
 
     /**
      * Method to be overriden by the implementing Analytics Method. Uses the property {@code output} in order
      * to be modified so the consumer who runs {@code execute()} can obtain the output.
-     * @param output {@code OLAPDataSet output} property of the abstract Analytics Method
      */
-    protected abstract void implementationExecution(OLAPDataSet output);
+    protected abstract void implementationExecution();
 
     /**
      * Used to determine wether the method uses or not a PMML file
@@ -82,7 +81,7 @@ public abstract class AnalyticsMethod {
      * @param data {@code OLAPDataSet} containing the incoming data
      * @param configuration {@code OLAPPortConfiguration} that specifies how to map {@code data} to the {@code input}
      *                                                   property of the Analytics method.
-     * @throws AnalyticsMethodInitializationException
+     * @throws AnalyticsMethodInitializationException Initialization exception
      */
     public void initialize(OLAPDataSet data, OLAPPortConfiguration configuration)
             throws AnalyticsMethodInitializationException {
