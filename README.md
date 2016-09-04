@@ -17,7 +17,7 @@ The main idea behind analytics methods is to receive the incoming data in the Op
 ### OpenLAP-DataSet
 The OpenLAP-DataSet is the internal data exchange format used in the OpenLAP. It is a modular JSON based serializable dataset to validate and exchange data between different components of the OpenLAP. Since the modular approach is used to develop the OpenLAP, different components act with relative independence from each other. Thus, a data exchange model is needed which can easily be serialized to and from JSON.
 
-The OpenLAP-DataSet is implemented under the class name `OLAPDataSet`. It is a collection of columns represented using the class `OLAPDataColumns`. Each column consists of two distinctive sections. A metadata section contains id, type, required flag, title and description of the column encapsulated in a class `OLAPColumnConfigurationData`. The second section is the data itself, represented as an array of the specified type. More details are available on the [OpenLAP-DataSet project](https://github.com/OpenLearningAnalyticsPlatform/OpenLAP-DataSet) page. Concrete examples to initialize, read from and write to OpenLAP-DataSet is given below in Step by step guide to implement a new Analytics Method.
+The OpenLAP-DataSet is implemented under the class name `OLAPDataSet`. It is a collection of columns represented using the class `OLAPDataColumns`. Each column consists of two distinctive sections. A metadata section contains id, type, required flag, title and description of the column encapsulated in a class `OLAPColumnConfigurationData`. The second section is the data itself, represented as an array of the specified type. More details are available on the [OpenLAP-DataSet project](https://github.com/OpenLearningAnalyticsPlatform/OpenLAP-DataSet) page. Concrete examples to initialize, read from and write to OpenLAP-DataSet is given below in step by step guide to implement a new Analytics Method.
 
 ### Methods of the AnalyticsMethod abstract class
 The `AnalyticsMethod` abstract class has a series of methods that allows new classes that extend it to be used by the OpenLAP.
@@ -27,40 +27,58 @@ The `AnalyticsMethod` abstract class has a series of methods that allows new cla
 * The `execute()` method returns the output `OLAPDataSet` after executing the `implementationExecution()` method and performing the analysis. 
 * The `getInputPorts()` and `getOutputPorts()` methods allow other classes to obtain the columns metadata as `OLAPColumnConfigurationData` class of the input and output `OLAPDataSet`.
 
-### Abstract Methods
-* The `implementationExecution()` method is where the developer will implement the logic to interpret the incoming data from input `OLAPDataSet`, analyze it and output it to the output `OLAPDataSet`. This method is called by the `execute()` method described above for executing this analytics method. The important point here is that the analyzed data should be written to the output `OLAPDataSet` before this method ends.
-* The ‘hasPMML()’ method returns a Boolean value indicating the desire of the developer to use [Predictive Model Markup Language (PMML)](http://dmg.org/pmml/v4-2-1/GeneralStructure.html) in the analytics method. The PMML is mainly used while performing a predictive analysis. The OpenLAP provides the mechanism to validate the PMML XML during upload.
-* The `getPMMLInputStream()`method should return an input stream to the PMML file available in the JAR bundle of the analytics method If the `hasPMML()` method returns `True`.
+#### Abstract Methods
+* The `implementationExecution()` method is where the developer will implement the logic to interpret the incoming data from input `OLAPDataSet`, analyze it and write it to the output `OLAPDataSet`. This method is called by the `execute()` method described above to execute this analytics method. The important point here is that the analyzed data should be written to the output `OLAPDataSet` before this method ends.
+* The `hasPMML()` method returns a Boolean value indicating the desire of the developer to use [Predictive Model Markup Language (PMML)](http://dmg.org/pmml/v4-2-1/GeneralStructure.html) in the analytics method. The PMML is mainly used while performing a predictive analysis. The OpenLAP provides the mechanism to validate the PMML XML during upload.
+* The `getPMMLInputStream()`method should return an input stream to the PMML file available in the JAR bundle of the analytics method If the `hasPMML()` method returns `true`.
+
 
 ## Step by step guide to implement a new Analytics Method
 
 The following steps must be followed by the developer to implement a new Analytics Method for the OpenLAP:
+
 1. Setting up the development environment
+
 2. Creating project and importing the dependencies into it.
+
 3. Create a class that extends the `AnalyticsMethod`.
+
 4. Define the input and output `OLAPDataSet`.
+
 5. Implement the abstract methods.
+
 6. Pack the binaries into a JAR bundle.
+
 7. Upload the JAR bundle using the OpenLAP administration panel along with the configuration.
 
-The steps are explained in detail with concrete examples in the following sections.
+These steps are explained in more details with concrete examples in the following sections.
 
 ### Step 1. Setting up the development environment
-To develop a new analytics method, you need to install the following pieces of software.
+To develop a new analytics method, you need to install the following softwares.
 * [Java Development Kit (JDK) 7+](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-* Any Integrated Development Environment (IDE) for Java development, such as, [Intellij IDEA](https://www.jetbrains.com/idea/download), [NetBeans](https://netbeans.org/downloads/), [Eclipse](https://eclipse.org/downloads/), etc. In the following steps we are going to use the Intellij IDEA for developing the sample analytics method using maven.
+* Any Integrated Development Environment (IDE) for Java development, such as, [Intellij IDEA](https://www.jetbrains.com/idea/download), [NetBeans](https://netbeans.org/downloads/), [Eclipse](https://eclipse.org/downloads/), etc. 
+
+In the following steps we are going to use the Intellij IDEA for developing the sample analytics method using maven.
 
 ### Step 2. Creating project and importing the dependencies into it.
-* Create a new project. File -> New -> Project
-* Select Maven from the left and click Next.
-* Enter the GroupId, ArtifactId and Version, e.g.
-GroupId: de.rwthaachen.openlap.analyticsmethods.Samples
-ArtifactId: ItemCounter
-Version: 1.0-SNAPSHOT
+* Create a new project. `File -> New -> Project`
+* Select `Maven` from the left and click `Next`.
+* Enter the `GroupId`, `ArtifactId` and `Version`, e.g.
+
+	GroupId: de.rwthaachen.openlap.analyticsmethods.Samples
+	
+	ArtifactId: ItemCounter
+	
+	Version: 1.0-SNAPSHOT
+	
 * Specify Project name and location, e.g.
+
 	Project Name: Item-Counter
+	
 	Project Location: C:\Users\xxxxx\Documents\IdeaProjects\Item-Counter
+	
 * Add JitPack repository to the ‘pom.xml’ file.
+
 Maven:
 ```xml
 <repositories>
