@@ -19,7 +19,7 @@ The OpenLAP-DataSet is the internal data exchange format used in the OpenLAP. It
 
 The OpenLAP-DataSet is implemented under the class name `OLAPDataSet`. It is a collection of columns represented using the class `OLAPDataColumns`. Each column consists of two distinctive sections. A metadata section contains id, type, required flag, title and description of the column encapsulated in a class `OLAPColumnConfigurationData`. The second section is the data itself, represented as an array of the specified type. More details are available on the [OpenLAP-DataSet project](https://github.com/OpenLearningAnalyticsPlatform/OpenLAP-DataSet) page. Concrete examples to initialize, read from and write to OpenLAP-DataSet is given below in step by step guide to implement a new Analytics Method.
 
-### Methods of the AnalyticsMethod abstract class
+### Methods of the `AnalyticsMethod` abstract class
 The `AnalyticsMethod` abstract class has a series of methods that allows new classes that extend it to be used by the OpenLAP.
 
 #### Implemented Methods
