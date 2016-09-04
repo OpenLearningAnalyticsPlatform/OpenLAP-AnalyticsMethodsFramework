@@ -212,4 +212,4 @@ The complied binaries must be packed into a JAR bundle. It should be noted that 
 * Rename the generated JAR bundle to contain only integers and characters.
 
 #### Step 7. Upload the JAR bundle to the OpenLAP.
-The newly implemented analytics method is now ready to be uploaded to the OpenLAP through the administration panel including the JAR file and parameters analytics method name, description, and name of the implementing class including package (the class that extends the `AnalyticsMethod` abstract class). 
+The newly implemented analytics method is now ready to be uploaded to the OpenLAP through the administration panel including the JAR file and parameters like, analytics method name, description, and name of the implementing class including package (the class that extends the `AnalyticsMethod` abstract class). 
