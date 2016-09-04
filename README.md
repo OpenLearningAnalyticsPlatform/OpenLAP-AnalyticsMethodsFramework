@@ -65,19 +65,19 @@ In the following steps we are going to use the Intellij IDEA for developing the 
 * Select `Maven` from the left and click `Next`.
 * Enter the `GroupId`, `ArtifactId` and `Version`, e.g.
 
-	GroupId: de.rwthaachen.openlap.analyticsmethods.Samples
+	`GroupId`: de.rwthaachen.openlap.analyticsmethods.Samples
 	
-	ArtifactId: ItemCounter
+	`ArtifactId`: ItemCounter
 	
-	Version: 1.0-SNAPSHOT
+	`Version`: 1.0-SNAPSHOT
 	
-* Specify Project name and location, e.g.
+* Specify project name and location, e.g.
 
-	Project Name: Item-Counter
+	`Project Name`: Item-Counter
 	
-	Project Location: C:\Users\xxxxx\Documents\IdeaProjects\Item-Counter
+	`Project Location`: C:\Users\xxxxx\Documents\IdeaProjects\Item-Counter
 	
-* Add JitPack repository to the ‘pom.xml’ file.
+* Add JitPack repository to the `pom.xml` file.
 
 Maven:
 ```xml
@@ -111,20 +111,20 @@ import java.io.InputStream;
 
 public class ItemCount extends AnalyticsMethod {
     protected void implementationExecution() {
-	...
+		...
     }
 
     public Boolean hasPMML() {
-        ...
+		...
     }
 
     public InputStream getPMMLInputStream() {
-        ...
+		...
     }
 }
 ```
 ### Step 4. Define the input and output `OLAPDataSet`.
-The input and output `OLAPDataSet`s should be defined in the constructor of the extended class ItemCount` as shown in the example below.
+The input and output `OLAPDataSet` should be defined in the constructor of the extended class `ItemCount` as shown in the example below.
 
 ```java
 // Declaration of input and output OLAPDataSet by adding OLAPDataColum objects with the OLAPDataColumnFactory
@@ -155,7 +155,8 @@ Three abstract methods of the `AnalyticsMethod` class (as discussed in the Funda
 ```java
     @Override
     protected void implementationExecution() { 
-LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
+	LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
+	
 	    //Iiterate over each item of the column
 	    for (Object item : this.getInput().getColumns().get("items_list").getData()) {
 	        if (itemCount.containsKey(item))
@@ -163,10 +164,12 @@ LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
 	        else
 	            itemCount.put((String) item, 1);
 	    }
+	    
 	    Set<Map.Entry<String, Integer>> itemCountSet = itemCount.entrySet();
 	    int counter = 10;
 	    if(itemCountSet.size()<10)
 	        counter = itemCountSet.size();
+	        
 	//Finding the item with the highest count, adding it to the output OLAPDataSet and removing it from the itemCount Array.
 	    for(;counter>0;counter--){
 	        Iterator<Map.Entry<String, Integer>> itemCountSetIterator = itemCountSet.iterator();
@@ -184,8 +187,9 @@ LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
 
     @Override
     public InputStream getPMMLInputStream() {
-	//if ‘hasPMML()’ return true than example can be like 
-	// return getClass().getResourceAsStream(PMML_RESOURCE_PATH);
+	//if `hasPMML()` return true than example can be like 
+	//return getClass().getResourceAsStream(PMML_RESOURCE_PATH);
+	
         return null;
     }
 
@@ -198,15 +202,14 @@ LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
 #### Step 6. Pack the binaries into a JAR bundle.
 
 The complied binaries must be packed into a JAR bundle. It should be noted that the file name of the JAR bundle should consists of integers and characters only. The JAR bundle can easily be generated in the Intellij IDEA by following the following steps:
-* Open the Run/Debug Configurations. Run -> Edit Configurations…
-* Add new configuration by pressing the + on the top left.
-* Select Maven from the available options.
-* Set the Name to “Generate JAR” (without double quotes).
-* On the parameters tab set Command line = clean install
-* Run the project by pressing Shift + F10 or from Run -> Run ‘Generate JAR’
-* The JAR bundle will be generated in the ‘targer’ folder within the project directory.
+* Open the `Run/Debug Configurations`. `Run -> Edit Configurations…`
+* Add new configuration by pressing the `+` on the top left.
+* Select `Maven` from the available options.
+* Set the `Name` to "Generate JAR" (without double quotes).
+* On the `Parameters` tab set `Command line` = clean install
+* Run the project by pressing `Shift + F10` or from `Run -> Run 'Generate JAR'`
+* The JAR bundle will be generated in the `targer` folder within the project directory.
 * Rename the generated JAR bundle to contain only integers and characters.
 
-7. Upload the JAR bundle using the OpenLAP administration panel along with the configuration.
-#### Step 7. . Upload the JAR bundle to the OpenLAP.
+#### Step 7. Upload the JAR bundle to the OpenLAP.
 The newly implemented analytics method is now ready to be uploaded to the OpenLAP through the administration panel including the JAR file and parameters analytics method name, description, and name of the implementing class including package (the class that extends the `AnalyticsMethod` abstract class). 
