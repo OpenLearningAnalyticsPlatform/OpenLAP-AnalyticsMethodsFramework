@@ -1,8 +1,7 @@
-# OpenLAP-AnalyticsMethodsFramework
-
 ## INTRODUCTION
+The Open Learning Analytics Platform (OpenLAP) supports extensibility and modularity by allowing developers and researches to add new Analytics Methods, Visualizations Techniques and Analytics Modules. The OpenLAP follows a simple principle of Inversion of Control: Once the new component is implemented and the binaries are uploaded, it is possible for the OpenLAP to use it at runtime, allowing developers and researches to extend the functionalities of the OpenLAP. 
 
-The OpenLAP-AnalyticsMethodsFramework contains the necessary classes that the developers can extend, implement, pack in JAR and upload to add new Analytics Methods to the OpenLAP. The following video gives the introduction to Open Learning Analytics Platform (OpenLAP) following with the step by step video guide to adding new Analytics Method to OpenLAP.
+The Analytics Methods component is responsible for managing the repository of all available analytics methods in the OpenLAP. Analytics methods of any type can be added to this repository such as statistics, data mining (DM), and social network analysis (SNA). The OpenLAP-AnalyticsMethodsFramework project contains the necessary classes that the developers can extend, implement, pack in JAR and upload to add new analytics method to the OpenLAP. The following video gives the introduction to the OpenLAP followed by the tutorial to add new Analytics Method to the OpenLAP.
 
 <p align="center">
 	<a href="http://www.youtube.com/watch?feature=player_embedded&v=9PdU8pQkvLU" target="_blank">
@@ -11,82 +10,74 @@ The OpenLAP-AnalyticsMethodsFramework contains the necessary classes that the de
 		<img src="http://img.youtube.com/vi/9PdU8pQkvLU/0.jpg" alt="OpenLAP Introduction and New Analytics Method"/>
 	</a>
 </p>
-## MOTIVATION
 
-One of the motivations of the OpenLAP is the extensibility and modularity based on the principle of allowing developers
-and researches to add new Analytics Methods, Visualizations and Analytics Modules.
-The OpenLAP-AnalyticsMethodsFramework has the facilities for developers to download the required dependencies 
-and guarantee that they can create new Analytics Methods that are compatible to the Analytics Method macro component of
-the OpenLAP.
+## Fundamental Concepts
+The main idea behind analytics methods is to receive the incoming data in the OpenLAP-DataSet format, apply the analysis to this data and return the analyzed data in the OpenLAP-DataSet format. To implement a new analytics method, the developer must extend the abstract `AnalyticsMethod` class available in the OpenLAP-AnalyticsMethodsFramework project. In the following sub-sections the OpenLAP-DataSet and the methods of the abstract `AnalyticsMethod` class are explained in detail.
 
-The framework follows a simple principle of Inversion of Control: Once the framework is implemented and the binaries
-are uploaded to the macro component, it is possible for the OpenLAP to use the uploaded Analytics Methods in runtime,
-allowing users to extend the functionalities that the platform provides trough a simple API.
+### OpenLAP-DataSet
+The OpenLAP-DataSet is the internal data exchange format used in the OpenLAP. It is a modular JSON based serializable dataset to validate and exchange data between different components of the OpenLAP. Since the modular approach is used to develop the OpenLAP, different components act with relative independence from each other. Thus, a data exchange model is needed which can easily be serialized to and from JSON.
 
-## FUNCTIONALITY AND INTERNALS
+The OpenLAP-DataSet is implemented under the class name `OLAPDataSet`. It is a collection of columns represented using the class `OLAPDataColumns`. Each column consists of two distinctive sections. A metadata section contains id, type, required flag, title and description of the column encapsulated in a class `OLAPColumnConfigurationData`. The second section is the data itself, represented as an array of the specified type. More details are available on the [OpenLAP-DataSet project](https://github.com/OpenLearningAnalyticsPlatform/OpenLAP-DataSet) page. Concrete examples to initialize, read from and write to OpenLAP-DataSet is given below in step by step guide to implement a new Analytics Method.
 
-The main element of the OpenLAP-AnalyticsMethodsFramework is the abstract class `AnalyticsMethod`. This class must be
-extended by any developer who wishes to expand the functionality of the Analytics Methods macro component of the
-OpenLAP, i.e. provide new Analytics Methods to analyze Indicator Data.
+### Methods of the `AnalyticsMethod` abstract class
+The `AnalyticsMethod` abstract class has a series of methods that allows new classes that extend it to be used by the OpenLAP.
 
-Since the Analytics Methods macro component is one of the main data manipulation entities of the
-OpenLAP, the `AnalyticsMethod` was designed to use at its core the OpenLAP-DataSet facilities. An Analytics Method
-purpose is to transform data from an input and pipe it to an output.
-The input will typically be from an Indicator of the Indicator Engine macro component and the outputs would be directed
-to visualizations of the Visualizer macro component. 
-Two `OpenLAPDataSet` realize effectively the input and output of the Analytics Method, and are the main
-properties of the `AnalyticsMethod`.
+#### Implemented Methods
+* The `initialize()` method takes an `OLAPDataSet` and an `OLAPPortConfiguration` as parameters. The `AnalyticsMethod` will use this as its input `OLAPDataSet` with the incoming data if the `OLAPPortConfiguration` is valid.
+* The `execute()` method returns the output `OLAPDataSet` after executing the `implementationExecution()` method and performing the analysis. 
+* The `getInputPorts()` and `getOutputPorts()` methods allow other classes to obtain the columns metadata as `OLAPColumnConfigurationData` class of the input and output `OLAPDataSet`.
 
-### Methods of the AnalyticsMethod abstract class
-Additionally, the `AnalyticsMethod` abstract class has a series of java methods that allows new 
-classes that extend it to be used by the OpenLAP.
+#### Abstract Methods
+* The `implementationExecution()` method is where the developer will implement the logic to interpret the incoming data from input `OLAPDataSet`, analyze it and write it to the output `OLAPDataSet`. This method is called by the `execute()` method described above to execute this analytics method. The important point here is that the analyzed data should be written to the output `OLAPDataSet` before this method ends.
+* The `hasPMML()` method returns a Boolean value indicating the desire of the developer to use [Predictive Model Markup Language (PMML)](http://dmg.org/pmml/v4-2-1/GeneralStructure.html) in the analytics method. The PMML is mainly used while performing a predictive analysis. The OpenLAP provides the mechanism to validate the PMML XML during upload.
+* The `getPMMLInputStream()`method should return an input stream to the PMML file available in the JAR bundle of the analytics method If the `hasPMML()` method returns `true`.
 
-#### Concrete Methods
-* A concrete initialization method `initialize` that takes a `OpenLAPDataSet` and a `OpenLAPPortConfig` as parameters.
-The `AnalyticsMethod` will use this to set it's input `OpenLAPDataSet` if the `OpenLAPPortConfig` is valid.
-* A concrete `execute()` method that returns the `AnalyticsMethod` output `OpenLAPDataSet` after executing it's main
-algorithm, i.e. the `implementationExecution` method. The reason for this is that the main implementation must guarantee
-that the output is consistent with what the adversited output `OpenLAPDataSet` informs. Typically, any class using an
-`AnalyticsMethod` will first initialize it with some Data in the form of a `OpenLAPDataSet` and a `OpenLAPPortConfig`,
-and then will use the `execute()` method to obtain the result of using the concrete Analytics Method over 
-the provided data.
-* The methods `getInputPorts` and `getOutputPorts` allow other classes to obtain the `OpenLAPColumnConfigData` of
-the input and output `OpenLAPDataSet` properties of the developed Analytis Method. This enables an automated
-way of the Analytics Method to make available the configuration it requires
-in order to be executed and the structure of its output once it is executed.
 
-### Abstract Methods
-* The `implementationExecution` realizes the main algorithm of the  Analytis Method. It will be used by the `execute`
-method described above. This method is where the developer will write the main algorithm, mainipulate the input data
-and output it into the output `OpenLAPDataSet` of the implementation of the `AnalyticsMethod`. It is important to note that
-the developer is responsible of outputing the result of the algorithm into the  `AnalyticsMethod` output `OpenLAPDataSet`,
-since it is the output proeprty the one that is returned by the `execute` method.
-* If the developer desires to use PMML [PMML](#references), then it is possible to allow the Framework to provide
-validation of the PMML XML during upload. The `hasPMML` method must then return `True` in order for the Analytics
-Method macro component to perform the PMML validation.
-* If the Analytics Method `hasPMML` returns `True`, then the method `getPMMLInputStream` must return an input stream
-with the PMML XML file. It is done so because of the manner Java references files within JAR files.
+## Step by step guide to implement a new Analytics Method
 
-## USAGE
+The following steps must be followed by the developer to implement a new Analytics Method for the OpenLAP:
 
-### Implementing an Analytics Method
+1. Setting up the development environment
 
-A developer must follow this steps to create a new Analytics Method for the OpenLAP:
+2. Creating project and importing the dependencies into it.
 
-1. Import the dependency into a new Java project.
-2. Create a class that extends the `AnalyticsMethod`.
-3. Declare the input and output `OpenLAPDataSet` of the implementation in the class that extends the `AnalyticsMethod`
-3. Implement the abstract methods of the `AnalyticsMethod` abstract class.
-4. Pack the binaries into a JAR file.
-5. Upload the JAR file trough the HTTP endpoint of the Analytics Method macro module along with a JSON metadata object
-that specifies the creator, name of the Analytics Method, description, and the name of the class that implements the
-`AnalyticsMethod` abstract class.
+3. Create a class that extends the `AnalyticsMethod`.
 
-The steps are explained in the next subsections.
+4. Define the input and output `OLAPDataSet`.
 
-#### Importing into a project
+5. Implement the abstract methods.
 
-**Step 1.** The JitPack repository must be added to the build file:
+6. Pack the binaries into a JAR bundle.
+
+7. Upload the JAR bundle using the OpenLAP administration panel along with the configuration.
+
+These steps are explained in more details with concrete examples in the following sections.
+
+### Step 1. Setting up the development environment
+To develop a new analytics method, you need to install the following softwares.
+* [Java Development Kit (JDK) 7+](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* Any Integrated Development Environment (IDE) for Java development, such as, [Intellij IDEA](https://www.jetbrains.com/idea/download), [NetBeans](https://netbeans.org/downloads/), [Eclipse](https://eclipse.org/downloads/), etc. 
+
+In the following steps we are going to use the Intellij IDEA for developing the sample analytics method using maven.
+
+### Step 2. Creating project and importing the dependencies into it.
+* Create a new project. `File -> New -> Project`
+* Select `Maven` from the left and click `Next`.
+* Enter the `GroupId`, `ArtifactId` and `Version`, e.g.
+
+	`GroupId`: de.rwthaachen.openlap.analyticsmethods.Samples
+	
+	`ArtifactId`: ItemCounter
+	
+	`Version`: 1.0-SNAPSHOT
+	
+* Specify project name and location, e.g.
+
+	`Project Name`: Item-Counter
+	
+	`Project Location`: C:\Users\xxxxx\Documents\IdeaProjects\Item-Counter
+	
+* Add JitPack repository to the `pom.xml` file.
 
 Maven:
 ```xml
@@ -97,134 +88,94 @@ Maven:
 		</repository>
 </repositories>
 ```
-Gradle:
-```gradle
-allprojects {
-    repositories {
-        ...
-        maven { url "https://jitpack.io" }
-    }
-}
-```
 
-**Step 2.**  The dependency must be added:
+* Add dependency of the OpenLAP-AnalyticsMethodsFramework project to the ‘pom.xml’ file. The latest version of the dependency xml can be retrieved from the  [![](https://jitpack.io/v/OpenLearningAnalyticsPlatform/OpenLAP-AnalyticsMethodsFramework.svg)](https://jitpack.io/#OpenLearningAnalyticsPlatform/OpenLAP-AnalyticsMethodsFramework). 
 
 Maven:
 ```xml
 	<dependency>
 	    <groupId>com.github.OpenLearningAnalyticsPlatform</groupId>
 	    <artifactId>OpenLAP-AnalyticsMethodsFramework</artifactId>
-	    <version>v2.0</version>
+	    <version>v2.2.1</version>
 	</dependency>
 ```
-Gradle:
-```gradle
-dependencies {
-	        compile 'com.github.OpenLearningAnalyticsPlatform:OpenLAP-AnalyticsMethodsFramework:v2.0'
-}
-```
 
-#### Create a class that extends the AnalyticsMethod
-
-In the project, a class that extends the `OpenLAP-AnalyticsMethodsFramework.core.AnalyticsMethod`
-as shown in the listing below:
+### Step 3. Create a class that extends the `AnalyticsMethod`.
+In the project create a class that extends the `AnalyticsMethod` as shown in the example below. The class should be contained in a package within the `src` folder to avoid naming conflicts.
 
 ```java
-// Class extending the AnalyticsMethod abstract class that is part of the OpenLAP-AnalyticsMethodsFramework
-package main;
-import DataSet.*;
+package de.rwthaachen.openlap.analyticsmethods.samples;
+
 import core.AnalyticsMethod;
-import exceptions.OpenLAPDataColumnException;
+import java.io.InputStream;
 
-public class AnalyticsMethodImplementation extends AnalyticsMethod {
-
-   //...
-   
-    @Override
-    protected void implementationExecution(OpenLAPDataSet output) {
-        ...
+public class ItemCount extends AnalyticsMethod {
+    protected void implementationExecution() {
+		...
     }
 
-    @Override
-    public InputStream getPMMLInputStream() {
-        ...
-    }
-
-    @Override
     public Boolean hasPMML() {
-        ...
+		...
+    }
+
+    public InputStream getPMMLInputStream() {
+		...
     }
 }
 ```
-
-The class must be always be contained within a package within the `src` folder.
-It cannot be a class which resides on the root of the `src` folder.
-
-### Declare input and output OpenLAPDataSets
-
-The constructor of the Analytics Method must declare the input and output `OpenLAPDataSet` objects. Each must be a
-collection of `OpenLAPDataColumn` objects created using the `OpenLAPDataColumnFactory`. An example can be seen in the listing
-below:
+### Step 4. Define the input and output `OLAPDataSet`.
+The input and output `OLAPDataSet` should be defined in the constructor of the extended class `ItemCount` as shown in the example below.
 
 ```java
-// Declaration of inputs and outputs adding OpenLAPDataColum objects with the OpenLAPDataColumnFactory
-public AnalyticsMethodImplementation()
+// Declaration of input and output OLAPDataSet by adding OLAPDataColum objects with the OLAPDataColumnFactory
+public ItemCount()
     {
-        this.setInput(new OpenLAPDataSet());
-        this.setOutput(new OpenLAPDataSet());
+        this.setInput(new OLAPDataSet());
+        this.setOutput(new OLAPDataSet());
 
         try {
-            this.getInput().addOpenLAPDataColumn(
-                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("item_name", OpenLAPColumnDataType.STRING, true, "Items", "List of items to count")
+            this.getInput().addOLAPDataColumn(
+                    OLAPDataColumnFactory.createOLAPDataColumnOfType("items_list", OLAPColumnDataType.STRING, true, "Items List", "List of items to count")
             );
-            this.getOutput().addOpenLAPDataColumn(
-                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("item_name", OpenLAPColumnDataType.STRING, true, "Item Names", "List of top 10 most occuring items in the list")
+            this.getOutput().addOLAPDataColumn(
+                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_name", OLAPColumnDataType.STRING, true, "Item Names", "List of top 10 most occuring items in the list")
             );
-            this.getOutput().addOpenLAPDataColumn(
-                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("item_count", OpenLAPColumnDataType.INTEGER, true, "Item Count", "Number of time each item occured in the list")
+            this.getOutput().addOLAPDataColumn(
+                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_count", OLAPColumnDataType.INTEGER, true, "Item Count", "Number of time each item occured in the list")
             );
-        } catch (OpenLAPDataColumnException e) {
+        } catch (OLAPDataColumnException e) {
             e.printStackTrace();
         }
     }
 ```
 
-#### Implement the required methods
-
-The developer must implement the three java methods that the abstract `AnalyticsMethod` has for being overriden.
-As explained before, the java method `implementationExecution` should contain the main algorithm and deliver the result
-into the output provided.
-If the developer desires to use the validation utilities that the back-end server gives for validating PMML
-files on upload of the Analytics Method, it is possible by returning true on the `hasPMML` method and providing an
-`InputStream` to the XML file in the `getPMMLInputStream` java method. An example of the overriding of these methods
-can be seen in the listing below.
+### Step 5. Implement the abstract methods.
+Three abstract methods of the `AnalyticsMethod` class (as discussed in the Fundamental Concept section) should be implemented. The example below shows a sample implementation of the analytics method which accepts the list of string items as an input, count the number of time each item occurred in the list and return the top 10 most occurred items.
 
 ```java
-// Example implementation of the methods that need to be overriden
-// from the OpenLAP-AnalyticsMethodsFramework.core.AnalyticsMethod
     @Override
-    protected void implementationExecution(OpenLAPDataSet output) {
-        LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
-	    // Iterate over each word of the column of the arrays
-	    for (Object word : this.getInput().getColumns().get("item_name").getData()) {
-	        if (itemCount.containsKey(word))
-	            itemCount.put((String) word, itemCount.get((String) word) + 1);
+    protected void implementationExecution() { 
+	LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
+	
+	    //Iiterate over each item of the column
+	    for (Object item : this.getInput().getColumns().get("items_list").getData()) {
+	        if (itemCount.containsKey(item))
+	            itemCount.put((String) item, itemCount.get((String) item) + 1);
 	        else
-	            itemCount.put((String) word, 1);
+	            itemCount.put((String) item, 1);
 	    }
+	    
 	    Set<Map.Entry<String, Integer>> itemCountSet = itemCount.entrySet();
 	    int counter = 10;
 	    if(itemCountSet.size()<10)
 	        counter = itemCountSet.size();
+	        
+	//Finding the item with the highest count, adding it to the output OLAPDataSet and removing it from the itemCount Array.
 	    for(;counter>0;counter--){
-	
 	        Iterator<Map.Entry<String, Integer>> itemCountSetIterator = itemCountSet.iterator();
-	
 	        Map.Entry<String, Integer> topEntry = itemCountSetIterator.next();
-	
 	        while (itemCountSetIterator.hasNext()) {
 	            Map.Entry<String, Integer> curEntry = itemCountSetIterator.next();
-	
 	            if (curEntry.getValue() > topEntry.getValue())
 	                topEntry = curEntry;
 	        }
@@ -236,7 +187,10 @@ can be seen in the listing below.
 
     @Override
     public InputStream getPMMLInputStream() {
-        return getClass().getResourceAsStream(PMML_RESOURCE_PATH);
+	//if `hasPMML()` return true than example can be like 
+	//return getClass().getResourceAsStream(PMML_RESOURCE_PATH);
+	
+        return null;
     }
 
     @Override
@@ -245,102 +199,17 @@ can be seen in the listing below.
     }
 ```
 
-#### Pack binaries into a JAR file
+#### Step 6. Pack the binaries into a JAR bundle.
 
-The complied binaries must be packed into a JAR file. An example of the partial 
-contents of a valid JAR file is listed below.
+The complied binaries must be packed into a JAR bundle. It should be noted that the file name of the JAR bundle should consists of integers and characters only. The JAR bundle can easily be generated in the Intellij IDEA by following the following steps:
+* Open the `Run/Debug Configurations`. `Run -> Edit Configurations…`
+* Add new configuration by pressing the `+` on the top left.
+* Select `Maven` from the available options.
+* Set the `Name` to "Generate JAR" (without double quotes).
+* On the `Parameters` tab set `Command line` = clean install
+* Run the project by pressing `Shift + F10` or from `Run -> Run 'Generate JAR'`
+* The JAR bundle will be generated in the `targer` folder within the project directory.
+* Rename the generated JAR bundle to contain only integers and characters.
 
-```
-$jar tf AnalyticsMethodImplementation.jar
-...
-core/
-core//
-core/AbstractAnalyticsMethod.class
-META-INF/maven/org.rwth-aachen.OpenLAP/
-META-INF/maven/org.rwth-aachen.OpenLAP//
-META-INF/maven/org.rwth-aachen.OpenLAP/AnalyticsMethodsFramework/
-META-INF/maven/org.rwth-aachen.OpenLAP/AnalyticsMethodsFramework//
-META-INF/maven/org.rwth-aachen.OpenLAP/AnalyticsMethodsFramework/pom.xml
-META-INF/maven/org.rwth-aachen.OpenLAP/AnalyticsMethodsFramework/pom.properties
-...
-```
-
-#### Upload JAR to the OpenLAP Analytics Methods macro module
-
-The Analytics Method is then ready to be uploaded by making an HTTP POST request to the `/AnalyticsMethods` endpoint
-of the OpenLAP Analytics Method macro component server with both the JAR file and a JSON object with
-the Analytics Method name, creator, description,
-implementing class(the class that extends the `AnalyticsMethod` abstract class)
- and an ASCII filename to be used in the server to store the JAR.
- 
-An example using the linux command `curl` is shown in the listing below.
-
-```
-$ curl \
-> -i -X POST \
-> -F jarBundle=@AnalyticsMethodImplementation.jar \
-> -F methodMetadata='{
-> "name" : "Example Analytics Method",  "creator" : "lechip",  "description" : "Analytics Method for example","implementingClass" : "main.AnalyticsMethodImplementation", "filename":"AnalyticsMethodImplementation"}' \
-> localhost:8080/AnalyticsMethods
-HTTP/1.1 100 Continue
-
-HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: application:development
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Mon, 28 Dec 2015 21:28:30 GMT
-
-{
-  "id": "2",
-  "name": "AnalyticsMethodImplementation",
-  "creator": "lechip",
-  "description": "A Method",
-  "implementingClass": "main.AnalyticsMethodImplementation",
-  "binariesLocation": "./analyticsMethodsJars_tests/",
-  "filename": "AnalyticsMethodExample"
-}
-```
-
-The successful response for method upload is shown in the following list, in its JSON form.
-
-```json
-{
-  "id": "2",
-  "name": "AnalyticsMethodImplementation",
-  "creator": "lechip",
-  "description": "A Method",
-  "implementingClass": "main.AnalyticsMethodImplementation",
-  "binariesLocation": "./analyticsMethodsJars_tests/",
-  "filename": "AnalyticsMethodExample"
-}
-```
-
-The Analytics Method macro component is then aware of the uploaded Analytics Method implementation and its information
-can be fetched with an HTTP GET request like the one in the following listing.
-
-```
-$ curl -i localhost:8080/AnalyticsMethods/2
-
-HTTP/1.1 200 OK
-Server: Apache-Coyote/1.1
-X-Application-Context: application:development
-Content-Type: application/json;charset=UTF-8
-Transfer-Encoding: chunked
-Date: Mon, 28 Dec 2015 21:33:04 GMT
-
-{
-  "id": "2",
-  "name": "AnalyticsMethodImplementation",
-  "creator": "lechip",
-  "description": "A Method",
-  "implementingClass": "main.AnalyticsMethodImplementation",
-  "binariesLocation": "./analyticsMethodsJars_tests/",
-  "filename": "AnalyticsMethodExample"
-}
-```
-
-## REFERENCES
-
-* [PMML]: "PMML Standard 4.2. (2014, February). Data Mining Group. Retrieved from
- http://dmg.org/pmml/v4-2-1/GeneralStructure.html"
+#### Step 7. Upload the JAR bundle to the OpenLAP.
+The newly implemented analytics method is now ready to be uploaded to the OpenLAP through the administration panel including the JAR file and parameters like, analytics method name, description, and name of the implementing class including package (the class that extends the `AnalyticsMethod` abstract class). 
