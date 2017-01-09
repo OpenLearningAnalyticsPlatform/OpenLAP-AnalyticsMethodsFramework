@@ -17,18 +17,18 @@ The main idea behind analytics methods is to receive the incoming data in the Op
 ### OpenLAP-DataSet
 The OpenLAP-DataSet is the internal data exchange format used in the OpenLAP. It is a modular JSON based serializable dataset to validate and exchange data between different components of the OpenLAP. Since the modular approach is used to develop the OpenLAP, different components act with relative independence from each other. Thus, a data exchange model is needed which can easily be serialized to and from JSON.
 
-The OpenLAP-DataSet is implemented under the class name `OLAPDataSet`. It is a collection of columns represented using the class `OLAPDataColumns`. Each column consists of two distinctive sections. A metadata section contains id, type, required flag, title and description of the column encapsulated in a class `OLAPColumnConfigurationData`. The second section is the data itself, represented as an array of the specified type. More details are available on the [OpenLAP-DataSet project](https://github.com/OpenLearningAnalyticsPlatform/OpenLAP-DataSet) page. Concrete examples to initialize, read from and write to OpenLAP-DataSet is given below in step by step guide to implement a new Analytics Method.
+The OpenLAP-DataSet is implemented under the class name `OpenLAPDataSet`. It is a collection of columns represented using the class `OpenLAPDataColumns`. Each column consists of two distinctive sections. A metadata section contains id, type, required flag, title and description of the column encapsulated in a class `OpenLAPColumnConfigData`. The second section is the data itself, represented as an array of the specified type. More details are available on the [OpenLAP-DataSet project](https://github.com/OpenLearningAnalyticsPlatform/OpenLAP-DataSet) page. Concrete examples to initialize, read from and write to OpenLAP-DataSet is given below in step by step guide to implement a new Analytics Method.
 
 ### Methods of the `AnalyticsMethod` abstract class
 The `AnalyticsMethod` abstract class has a series of methods that allows new classes that extend it to be used by the OpenLAP.
 
 #### Implemented Methods
-* The `initialize()` method takes an `OLAPDataSet` and an `OLAPPortConfiguration` as parameters. The `AnalyticsMethod` will use this as its input `OLAPDataSet` with the incoming data if the `OLAPPortConfiguration` is valid.
-* The `execute()` method returns the output `OLAPDataSet` after executing the `implementationExecution()` method and performing the analysis. 
-* The `getInputPorts()` and `getOutputPorts()` methods allow other classes to obtain the columns metadata as `OLAPColumnConfigurationData` class of the input and output `OLAPDataSet`.
+* The `initialize()` method takes an `OpenLAPDataSet` and an `OpenLAPPortConfig` as parameters. The `AnalyticsMethod` will use this as its input `OpenLAPDataSet` with the incoming data if the `OpenLAPPortConfig` is valid.
+* The `execute()` method returns the output `OpenLAPDataSet` after executing the `implementationExecution()` method and performing the analysis.
+* The `getInputPorts()` and `getOutputPorts()` methods allow other classes to obtain the columns metadata as `OpenLAPColumnConfigData` class of the input and output `OpenLAPDataSet`.
 
 #### Abstract Methods
-* The `implementationExecution()` method is where the developer will implement the logic to interpret the incoming data from input `OLAPDataSet`, analyze it and write it to the output `OLAPDataSet`. This method is called by the `execute()` method described above to execute this analytics method. The important point here is that the analyzed data should be written to the output `OLAPDataSet` before this method ends.
+* The `implementationExecution()` method is where the developer will implement the logic to interpret the incoming data from input `OpenLAPDataSet`, analyze it and write it to the output `OpenLAPDataSet`. This method is called by the `execute()` method described above to execute this analytics method. The important point here is that the analyzed data should be written to the output `OpenLAPDataSet` before this method ends.
 * The `hasPMML()` method returns a Boolean value indicating the desire of the developer to use [Predictive Model Markup Language (PMML)](http://dmg.org/pmml/v4-2-1/GeneralStructure.html) in the analytics method. The PMML is mainly used while performing a predictive analysis. The OpenLAP provides the mechanism to validate the PMML XML during upload.
 * The `getPMMLInputStream()`method should return an input stream to the PMML file available in the JAR bundle of the analytics method If the `hasPMML()` method returns `true`.
 
@@ -43,7 +43,7 @@ The following steps must be followed by the developer to implement a new Analyti
 
 3. Create a class that extends the `AnalyticsMethod`.
 
-4. Define the input and output `OLAPDataSet`.
+4. Define the input and output `OpenLAPDataSet`.
 
 5. Implement the abstract methods.
 
@@ -123,27 +123,27 @@ public class ItemCount extends AnalyticsMethod {
     }
 }
 ```
-### Step 4. Define the input and output `OLAPDataSet`.
-The input and output `OLAPDataSet` should be defined in the constructor of the extended class `ItemCount` as shown in the example below.
+### Step 4. Define the input and output `OpenLAPDataSet`.
+The input and output `OpenLAPDataSet` should be defined in the constructor of the extended class `ItemCount` as shown in the example below.
 
 ```java
-// Declaration of input and output OLAPDataSet by adding OLAPDataColum objects with the OLAPDataColumnFactory
+// Declaration of input and output OpenLAPDataSet by adding OpenLAPDataColum objects with the OpenLAPDataColumnFactory
 public ItemCount()
     {
-        this.setInput(new OLAPDataSet());
-        this.setOutput(new OLAPDataSet());
+        this.setInput(new OpenLAPDataSet());
+        this.setOutput(new OpenLAPDataSet());
 
         try {
-            this.getInput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("items_list", OLAPColumnDataType.STRING, true, "Items List", "List of items to count")
+            this.getInput().addOpenLAPDataColumn(
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("items_list", OpenLAPColumnDataType.STRING, true, "Items List", "List of items to count")
             );
-            this.getOutput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_name", OLAPColumnDataType.STRING, true, "Item Names", "List of top 10 most occuring items in the list")
+            this.getOutput().addOpenLAPDataColumn(
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("item_name", OpenLAPColumnDataType.STRING, true, "Item Names", "List of top 10 most occuring items in the list")
             );
-            this.getOutput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_count", OLAPColumnDataType.INTEGER, true, "Item Count", "Number of time each item occured in the list")
+            this.getOutput().addOpenLAPDataColumn(
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("item_count", OpenLAPColumnDataType.INTEGER, true, "Item Count", "Number of time each item occured in the list")
             );
-        } catch (OLAPDataColumnException e) {
+        } catch (OpenLAPDataColumnException e) {
             e.printStackTrace();
         }
     }
@@ -170,7 +170,7 @@ Three abstract methods of the `AnalyticsMethod` class (as discussed in the Funda
 	    if(itemCountSet.size()<10)
 	        counter = itemCountSet.size();
 	        
-	//Finding the item with the highest count, adding it to the output OLAPDataSet and removing it from the itemCount Array.
+	//Finding the item with the highest count, adding it to the output OpenLAPDataSet and removing it from the itemCount Array.
 	    for(;counter>0;counter--){
 	        Iterator<Map.Entry<String, Integer>> itemCountSetIterator = itemCountSet.iterator();
 	        Map.Entry<String, Integer> topEntry = itemCountSetIterator.next();
