@@ -1,7 +1,7 @@
 package core;
 
-import DataSet.*;
 import core.exceptions.AnalyticsMethodInitializationException;
+import de.rwthaachen.openlap.dataset.*;
 
 import java.io.InputStream;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  *
  * To make an implementation the developer must:
  * <ol>
- *     <li>Use the {@code OLAPDataColumnFactory} to set both inputs an outputs</li>
+ *     <li>Use the {@code OpenLAPDataColumnFactory} to set both inputs an outputs</li>
  *     <li>Override the methods {@code hasPMML()} and {@code getPMMLFile()}, which allow service consumer
  *     classes to access the PMML file if it exists and to inform themselves about the existence of such file.</li>
  *     <li>Override the main algorithm of the class: {@code implementationExecution()} which MUST write its
@@ -19,22 +19,22 @@ import java.util.List;
  *     which returns {@code output} after executing {@code implementationExecution()}</li>
  * </ol>
  *
- * Initial data setup is done by the {@code initialize(OLAPDataSet data, OLAPPortConfiguration configuration)}
+ * Initial data setup is done by the {@code initialize(OpenLAPDataSet data, OpenLAPPortConfig configuration)}
  * method of this class and uses the given configuration to populate the {@code input}.
  * @author  Oscar Barrios
  */
 
 public abstract class AnalyticsMethod {
 
-    private OLAPDataSet input;
-    private OLAPDataSet output;
+    private OpenLAPDataSet input;
+    private OpenLAPDataSet output;
 
     /**
      * Main execution for the Analytics Method. Will run {@code implementationExecution(output)}, which should be set
      * internally. This forces the implementation to use the output.
-     * @return {@code OLAPDataSet output} property of the Analytics Method.
+     * @return {@code OpenLAPDataSet output} property of the Analytics Method.
      */
-    public OLAPDataSet execute(){
+    public OpenLAPDataSet execute(){
         implementationExecution();
         return output;
     }
@@ -58,34 +58,34 @@ public abstract class AnalyticsMethod {
     public abstract InputStream getPMMLInputStream();
 
     /**
-     * Gets the {@code OLAPColumnConfigurationData} for the {@code input} OLAPDataSet.
+     * Gets the {@code OpenLAPColumnConfigData} for the {@code input} OpenLAPDataSet.
      * Note that the implementor MUST set the {@code input} property
-     * @return an array of the  {@code OLAPColumnConfigurationData} for the {@code input}  OLAPDataSet
+     * @return an array of the  {@code OpenLAPColumnConfigData} for the {@code input}  OpenLAPDataSet
      */
-    public List<OLAPColumnConfigurationData> getInputPorts(){
+    public List<OpenLAPColumnConfigData> getInputPorts(){
         return input.getColumnsConfigurationData();
     }
     /**
-     * Gets the {@code OLAPColumnConfigurationData} for the {@code output} OLAPDataSet.
+     * Gets the {@code OpenLAPColumnConfigData} for the {@code output} OpenLAPDataSet.
      * Note that the implementor MUST set the {@code output} property
-     * @return an array of the  {@code OLAPColumnConfigurationData} for the {@code output} OLAPDataSet
+     * @return an array of the  {@code OpenLAPColumnConfigData} for the {@code output} OpenLAPDataSet
      */
-    public List<OLAPColumnConfigurationData> getOutputPorts(){
+    public List<OpenLAPColumnConfigData> getOutputPorts(){
         return output.getColumnsConfigurationData();
     }
 
     /**
-     * Uses a given {@code OLAPPortConfiguration} to initialize the data of the {@code input} property fot the Method.
+     * Uses a given {@code OpenLAPPortConfig} to initialize the data of the {@code input} property fot the Method.
      * Since the service consumer will use this method before running {@code execute()}, is important that the
-     * {@code OLAPDataSet input} is properly set by the implementation.
-     * @param data {@code OLAPDataSet} containing the incoming data
-     * @param configuration {@code OLAPPortConfiguration} that specifies how to map {@code data} to the {@code input}
+     * {@code OpenLAPDataSet input} is properly set by the implementation.
+     * @param data {@code OpenLAPDataSet} containing the incoming data
+     * @param configuration {@code OpenLAPPortConfig} that specifies how to map {@code data} to the {@code input}
      *                                                   property of the Analytics method.
      * @throws AnalyticsMethodInitializationException Initialization exception
      */
-    public void initialize(OLAPDataSet data, OLAPPortConfiguration configuration)
+    public void initialize(OpenLAPDataSet data, OpenLAPPortConfig configuration)
             throws AnalyticsMethodInitializationException {
-        OLAPDataSetConfigurationValidationResult validationResult;
+        OpenLAPDataSetConfigValidationResult validationResult;
         // Check that the configuration
         validationResult =input.validateConfiguration(configuration);
         if (!validationResult.isValid())
@@ -94,7 +94,7 @@ public abstract class AnalyticsMethod {
             throw new AnalyticsMethodInitializationException(validationResult.getValidationMessage());
         }
         // for each configuration element of the configuration
-        for (OLAPPortMapping mappingEntry:
+        for (OpenLAPPortMapping mappingEntry:
              configuration.getMapping()) {
             // map the data of the column c.id==element.id to the input
             input.getColumns().get(mappingEntry.getInputPort().getId()).setData(
@@ -107,7 +107,7 @@ public abstract class AnalyticsMethod {
      * Getter accessor for the {@code input} of the Analytics Method
      * @return the {@code input} of the Analytics Method
      */
-    public OLAPDataSet getInput() {
+    public OpenLAPDataSet getInput() {
         return input;
     }
 
@@ -115,7 +115,7 @@ public abstract class AnalyticsMethod {
      * Getter accessor for the {@code output} of the Analytics Method
      * @return the {@code output} of the Analytics Method
      */
-    public OLAPDataSet getOutput() {
+    public OpenLAPDataSet getOutput() {
         return output;
     }
 
@@ -123,7 +123,7 @@ public abstract class AnalyticsMethod {
      * Setter accessor for the {@code input} of the Analytics Method
      * @param input to be set
      */
-    public void setInput(OLAPDataSet input) {
+    public void setInput(OpenLAPDataSet input) {
         this.input = input;
     }
 
@@ -131,7 +131,7 @@ public abstract class AnalyticsMethod {
      * Setter accessor for the {@code output} of the Analytics Method
      * @param output to be set
      */
-    public void setOutput(OLAPDataSet output) {
+    public void setOutput(OpenLAPDataSet output) {
         this.output = output;
     }
 

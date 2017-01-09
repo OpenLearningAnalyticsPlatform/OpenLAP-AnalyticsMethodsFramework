@@ -34,7 +34,7 @@ OpenLAP, the `AnalyticsMethod` was designed to use at its core the OpenLAP-DataS
 purpose is to transform data from an input and pipe it to an output.
 The input will typically be from an Indicator of the Indicator Engine macro component and the outputs would be directed
 to visualizations of the Visualizer macro component. 
-Two `OLAPDataSet` realize effectively the input and output of the Analytics Method, and are the main
+Two `OpenLAPDataSet` realize effectively the input and output of the Analytics Method, and are the main
 properties of the `AnalyticsMethod`.
 
 ### Methods of the AnalyticsMethod abstract class
@@ -42,24 +42,24 @@ Additionally, the `AnalyticsMethod` abstract class has a series of java methods 
 classes that extend it to be used by the OpenLAP.
 
 #### Concrete Methods
-* A concrete initialization method `initialize` that takes a `OLAPDataSet` and a `OLAPPortConfiguration` as parameters.
-The `AnalyticsMethod` will use this to set it's input `OLAPDataSet` if the `OLAPPortConfiguration` is valid.
-* A concrete `execute()` method that returns the `AnalyticsMethod` output `OLAPDataSet` after executing it's main
+* A concrete initialization method `initialize` that takes a `OpenLAPDataSet` and a `OpenLAPPortConfig` as parameters.
+The `AnalyticsMethod` will use this to set it's input `OpenLAPDataSet` if the `OpenLAPPortConfig` is valid.
+* A concrete `execute()` method that returns the `AnalyticsMethod` output `OpenLAPDataSet` after executing it's main
 algorithm, i.e. the `implementationExecution` method. The reason for this is that the main implementation must guarantee
-that the output is consistent with what the adversited output `OLAPDataSet` informs. Typically, any class using an
-`AnalyticsMethod` will first initialize it with some Data in the form of a `OLAPDataSet` and a `OLAPPortConfiguration`,
+that the output is consistent with what the adversited output `OpenLAPDataSet` informs. Typically, any class using an
+`AnalyticsMethod` will first initialize it with some Data in the form of a `OpenLAPDataSet` and a `OpenLAPPortConfig`,
 and then will use the `execute()` method to obtain the result of using the concrete Analytics Method over 
 the provided data.
-* The methods `getInputPorts` and `getOutputPorts` allow other classes to obtain the `OLAPColumnConfigurationData` of
-the input and output `OLAPDataSet` properties of the developed Analytis Method. This enables an automated
+* The methods `getInputPorts` and `getOutputPorts` allow other classes to obtain the `OpenLAPColumnConfigData` of
+the input and output `OpenLAPDataSet` properties of the developed Analytis Method. This enables an automated
 way of the Analytics Method to make available the configuration it requires
 in order to be executed and the structure of its output once it is executed.
 
 ### Abstract Methods
 * The `implementationExecution` realizes the main algorithm of the  Analytis Method. It will be used by the `execute`
 method described above. This method is where the developer will write the main algorithm, mainipulate the input data
-and output it into the output `OLAPDataSet` of the implementation of the `AnalyticsMethod`. It is important to note that
-the developer is responsible of outputing the result of the algorithm into the  `AnalyticsMethod` output `OLAPDataSet`, 
+and output it into the output `OpenLAPDataSet` of the implementation of the `AnalyticsMethod`. It is important to note that
+the developer is responsible of outputing the result of the algorithm into the  `AnalyticsMethod` output `OpenLAPDataSet`,
 since it is the output proeprty the one that is returned by the `execute` method.
 * If the developer desires to use PMML [PMML](#references), then it is possible to allow the Framework to provide
 validation of the PMML XML during upload. The `hasPMML` method must then return `True` in order for the Analytics
@@ -75,7 +75,7 @@ A developer must follow this steps to create a new Analytics Method for the Open
 
 1. Import the dependency into a new Java project.
 2. Create a class that extends the `AnalyticsMethod`.
-3. Declare the input and output `OLAPDataSet` of the implementation in the class that extends the `AnalyticsMethod`
+3. Declare the input and output `OpenLAPDataSet` of the implementation in the class that extends the `AnalyticsMethod`
 3. Implement the abstract methods of the `AnalyticsMethod` abstract class.
 4. Pack the binaries into a JAR file.
 5. Upload the JAR file trough the HTTP endpoint of the Analytics Method macro module along with a JSON metadata object
@@ -134,14 +134,14 @@ as shown in the listing below:
 package main;
 import DataSet.*;
 import core.AnalyticsMethod;
-import exceptions.OLAPDataColumnException;
+import exceptions.OpenLAPDataColumnException;
 
 public class AnalyticsMethodImplementation extends AnalyticsMethod {
 
    //...
    
     @Override
-    protected void implementationExecution(OLAPDataSet output) {
+    protected void implementationExecution(OpenLAPDataSet output) {
         ...
     }
 
@@ -160,30 +160,30 @@ public class AnalyticsMethodImplementation extends AnalyticsMethod {
 The class must be always be contained within a package within the `src` folder.
 It cannot be a class which resides on the root of the `src` folder.
 
-### Declare input and output OLAPDataSets
+### Declare input and output OpenLAPDataSets
 
-The constructor of the Analytics Method must declare the input and output `OLAPDataSet` objects. Each must be a
-collection of `OLAPDataColumn` objects created using the `OLAPDataColumnFactory`. An example can be seen in the listing
+The constructor of the Analytics Method must declare the input and output `OpenLAPDataSet` objects. Each must be a
+collection of `OpenLAPDataColumn` objects created using the `OpenLAPDataColumnFactory`. An example can be seen in the listing
 below:
 
 ```java
-// Declaration of inputs and outputs adding OLAPDataColum objects with the OLAPDataColumnFactory
+// Declaration of inputs and outputs adding OpenLAPDataColum objects with the OpenLAPDataColumnFactory
 public AnalyticsMethodImplementation()
     {
-        this.setInput(new OLAPDataSet());
-        this.setOutput(new OLAPDataSet());
+        this.setInput(new OpenLAPDataSet());
+        this.setOutput(new OpenLAPDataSet());
 
         try {
-            this.getInput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_name", OLAPColumnDataType.STRING, true, "Items", "List of items to count")
+            this.getInput().addOpenLAPDataColumn(
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("item_name", OpenLAPColumnDataType.STRING, true, "Items", "List of items to count")
             );
-            this.getOutput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_name", OLAPColumnDataType.STRING, true, "Item Names", "List of top 10 most occuring items in the list")
+            this.getOutput().addOpenLAPDataColumn(
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("item_name", OpenLAPColumnDataType.STRING, true, "Item Names", "List of top 10 most occuring items in the list")
             );
-            this.getOutput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("item_count", OLAPColumnDataType.INTEGER, true, "Item Count", "Number of time each item occured in the list")
+            this.getOutput().addOpenLAPDataColumn(
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("item_count", OpenLAPColumnDataType.INTEGER, true, "Item Count", "Number of time each item occured in the list")
             );
-        } catch (OLAPDataColumnException e) {
+        } catch (OpenLAPDataColumnException e) {
             e.printStackTrace();
         }
     }
@@ -203,7 +203,7 @@ can be seen in the listing below.
 // Example implementation of the methods that need to be overriden
 // from the OpenLAP-AnalyticsMethodsFramework.core.AnalyticsMethod
     @Override
-    protected void implementationExecution(OLAPDataSet output) {
+    protected void implementationExecution(OpenLAPDataSet output) {
         LinkedHashMap<String, Integer> itemCount = new LinkedHashMap<String, Integer>();
 	    // Iterate over each word of the column of the arrays
 	    for (Object word : this.getInput().getColumns().get("item_name").getData()) {
@@ -256,12 +256,12 @@ $jar tf AnalyticsMethodImplementation.jar
 core/
 core//
 core/AbstractAnalyticsMethod.class
-META-INF/maven/org.rwth-aachen.olap/
-META-INF/maven/org.rwth-aachen.olap//
-META-INF/maven/org.rwth-aachen.olap/AnalyticsMethodsFramework/
-META-INF/maven/org.rwth-aachen.olap/AnalyticsMethodsFramework//
-META-INF/maven/org.rwth-aachen.olap/AnalyticsMethodsFramework/pom.xml
-META-INF/maven/org.rwth-aachen.olap/AnalyticsMethodsFramework/pom.properties
+META-INF/maven/org.rwth-aachen.OpenLAP/
+META-INF/maven/org.rwth-aachen.OpenLAP//
+META-INF/maven/org.rwth-aachen.OpenLAP/AnalyticsMethodsFramework/
+META-INF/maven/org.rwth-aachen.OpenLAP/AnalyticsMethodsFramework//
+META-INF/maven/org.rwth-aachen.OpenLAP/AnalyticsMethodsFramework/pom.xml
+META-INF/maven/org.rwth-aachen.OpenLAP/AnalyticsMethodsFramework/pom.properties
 ...
 ```
 

@@ -1,8 +1,8 @@
-import DataSet.OLAPColumnDataType;
-import DataSet.OLAPDataColumnFactory;
-import DataSet.OLAPDataSet;
 import core.AnalyticsMethod;
-import exceptions.OLAPDataColumnException;
+import de.rwthaachen.openlap.dataset.OpenLAPColumnDataType;
+import de.rwthaachen.openlap.dataset.OpenLAPDataColumnFactory;
+import de.rwthaachen.openlap.dataset.OpenLAPDataSet;
+import de.rwthaachen.openlap.exceptions.OpenLAPDataColumnException;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -17,17 +17,17 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
 
     public AnalyticsMethodsTestImplementation()
     {
-        this.setInput(new OLAPDataSet());
-        this.setOutput(new OLAPDataSet());
+        this.setInput(new OpenLAPDataSet());
+        this.setOutput(new OpenLAPDataSet());
 
         try {
-            this.getInput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("inputColumn1",OLAPColumnDataType.STRING, true)
+            this.getInput().addOpenLAPDataColumn(
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("inputColumn1", OpenLAPColumnDataType.STRING, true)
             );
-            this.getOutput().addOLAPDataColumn(
-                    OLAPDataColumnFactory.createOLAPDataColumnOfType("outputColumn1",OLAPColumnDataType.INTEGER, false)
+            this.getOutput().addOpenLAPDataColumn(
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("outputColumn1",OpenLAPColumnDataType.INTEGER, false)
             );
-        } catch (OLAPDataColumnException e) {
+        } catch (OpenLAPDataColumnException e) {
             e.printStackTrace();
         }
     }

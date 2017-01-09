@@ -1,11 +1,11 @@
-import DataSet.OLAPColumnConfigurationData;
-import DataSet.OLAPDataSet;
-import DataSet.OLAPPortConfiguration;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import core.AnalyticsMethod;
 import core.exceptions.AnalyticsMethodInitializationException;
+import de.rwthaachen.openlap.dataset.OpenLAPColumnConfigData;
+import de.rwthaachen.openlap.dataset.OpenLAPDataSet;
+import de.rwthaachen.openlap.dataset.OpenLAPPortConfig;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +22,8 @@ public class AnalyticsMethodFrameworkTests {
 
 
     AnalyticsMethod testMethod1;
-    OLAPDataSet inputDataSet;
-    OLAPPortConfiguration configuration1;
+    OpenLAPDataSet inputDataSet;
+    OpenLAPPortConfig configuration1;
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -36,11 +36,11 @@ public class AnalyticsMethodFrameworkTests {
 
         testMethod1 = new AnalyticsMethodsTestImplementation();
         // Initialize mockup DataSet for inputDataSet to the analytics method
-        inputDataSet = mapper.readValue(this.getClass().getResourceAsStream("DataSetSample.json"),OLAPDataSet.class);
-        // Initialize mockup OLAPPortConfiguration
+        inputDataSet = mapper.readValue(this.getClass().getResourceAsStream("DataSetSample.json"),OpenLAPDataSet.class);
+        // Initialize mockup OpenLAPPortConfig
         configuration1 = mapper.
                 readValue(this.getClass().getResourceAsStream("ConfigurationSample.json"),
-                        OLAPPortConfiguration.class);
+                        OpenLAPPortConfig.class);
     }
 
     // Test initialization
@@ -57,12 +57,12 @@ public class AnalyticsMethodFrameworkTests {
     @Test
     public void testGetInputsAndOutputs() throws IOException {
         //Make object for input from json
-        List<OLAPColumnConfigurationData> inputExpected = mapper.readValue(this.getClass().
+        List<OpenLAPColumnConfigData> inputExpected = mapper.readValue(this.getClass().
                 getResourceAsStream("InputConfigurationDataSample.json"),
-                mapper.getTypeFactory().constructCollectionType(List.class, OLAPColumnConfigurationData.class) );
-        List<OLAPColumnConfigurationData> outputExpected = mapper.readValue(this.getClass().
+                mapper.getTypeFactory().constructCollectionType(List.class, OpenLAPColumnConfigData.class) );
+        List<OpenLAPColumnConfigData> outputExpected = mapper.readValue(this.getClass().
                 getResourceAsStream("OutputConfigurationDataSample.json"),
-                mapper.getTypeFactory().constructCollectionType(List.class, OLAPColumnConfigurationData.class) );
+                mapper.getTypeFactory().constructCollectionType(List.class, OpenLAPColumnConfigData.class) );
         //Make object for output from json
 
         Assert.assertArrayEquals(inputExpected.toArray(), testMethod1.getInputPorts().toArray());
@@ -75,8 +75,8 @@ public class AnalyticsMethodFrameworkTests {
     @Test
     public void testExecution() throws IOException, AnalyticsMethodInitializationException {
         //Make a dataset from json with the expected result
-        OLAPDataSet expectedOutPutDataset = mapper.readValue(
-                this.getClass().getResourceAsStream("DataSetOutputSample.json"), OLAPDataSet.class);
+        OpenLAPDataSet expectedOutPutDataset = mapper.readValue(
+                this.getClass().getResourceAsStream("DataSetOutputSample.json"), OpenLAPDataSet.class);
         testMethod1.initialize(inputDataSet, configuration1);
 
         //Execute the method
