@@ -2,9 +2,12 @@ package core;
 
 import core.exceptions.AnalyticsMethodInitializationException;
 import de.rwthaachen.openlap.dataset.*;
+import de.rwthaachen.openlap.dynamicparam.OpenLAPDynamicParams;
 
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Analytics Method abstract class.
@@ -28,6 +31,7 @@ public abstract class AnalyticsMethod {
 
     private OpenLAPDataSet input;
     private OpenLAPDataSet output;
+    private OpenLAPDynamicParams params;
 
     /**
      * Main execution for the Analytics Method. Will run {@code implementationExecution(output)}, which should be set
@@ -94,12 +98,57 @@ public abstract class AnalyticsMethod {
             throw new AnalyticsMethodInitializationException(validationResult.getValidationMessage());
         }
         // for each configuration element of the configuration
-        for (OpenLAPPortMapping mappingEntry:
-             configuration.getMapping()) {
+        for (OpenLAPPortMapping mappingEntry: configuration.getMapping()) {
             // map the data of the column c.id==element.id to the input
             input.getColumns().get(mappingEntry.getInputPort().getId()).setData(
                     data.getColumns().get(mappingEntry.getOutputPort().getId()).getData()
             );
+        }
+
+        //adding the default values of the parameters in the OpenLAPDynamicParam object for this method
+        for (String paramId: getParams().getParams().keySet())
+            params.getParams().get(paramId).setValue(getParams().getParams().get(paramId).getDefaultValue());
+    }
+
+    /**
+     *
+     * @param data
+     * @param configuration
+     * @param additionalParams
+     * @throws AnalyticsMethodInitializationException
+     */
+    public void initialize(OpenLAPDataSet data, OpenLAPPortConfig configuration, Map<String, String> additionalParams)
+            throws AnalyticsMethodInitializationException {
+        OpenLAPDataSetConfigValidationResult validationResult;
+        // Check that the configuration
+        validationResult =input.validateConfiguration(configuration);
+        if (!validationResult.isValid())
+        {
+            // throw exception if not
+            throw new AnalyticsMethodInitializationException(validationResult.getValidationMessage());
+        }
+        // for each configuration element of the configuration
+        for (OpenLAPPortMapping mappingEntry: configuration.getMapping()) {
+            // map the data of the column c.id==element.id to the input
+            input.getColumns().get(mappingEntry.getInputPort().getId()).setData(
+                    data.getColumns().get(mappingEntry.getOutputPort().getId()).getData()
+            );
+        }
+
+        //adding the values of the parameters in the OpenLAPDynamicParam object
+        if(getParams() != null) {
+            for (String paramId : getParams().getParams().keySet()) {
+                if (additionalParams.containsKey(paramId)) {
+                    switch (getParams().getParams().get(paramId).getDataType()) {
+                        case STRING:
+                            params.getParams().get(paramId).setValue(additionalParams.get(paramId));
+                        case INTEGER:
+                            params.getParams().get(paramId).setValue(Integer.parseInt(additionalParams.get(paramId)));
+                    }
+                } else {
+                    getParams().getParams().get(paramId).setValue(getParams().getParams().get(paramId).getDefaultValue());
+                }
+            }
         }
     }
 
@@ -136,6 +185,11 @@ public abstract class AnalyticsMethod {
     }
 
 
+    public OpenLAPDynamicParams getParams() {
+        return params;
+    }
 
-
+    public void setParams(OpenLAPDynamicParams params) {
+        this.params = params;
+    }
 }

@@ -27,6 +27,11 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.OpenLearningAnalyticsPlatform</groupId>
+            <artifactId>OpenLAP-DynamicParameters</artifactId>
+            <version>268a6814bf</version>
+        </dependency>
     </dependencies>
 
 
