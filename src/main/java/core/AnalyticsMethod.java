@@ -142,10 +142,16 @@ public abstract class AnalyticsMethod {
                     switch (getParams().getParams().get(paramId).getDataType()) {
                         case STRING:
                             params.getParams().get(paramId).setValue(additionalParams.get(paramId));
+                            break;
                         case INTEGER:
                             params.getParams().get(paramId).setValue(Integer.parseInt(additionalParams.get(paramId)));
+                            break;
                         case FLOAT:
                             params.getParams().get(paramId).setValue(Float.parseFloat(additionalParams.get(paramId)));
+                            break;
+                        default:
+                            params.getParams().get(paramId).setValue(additionalParams.get(paramId));
+                            break;
                     }
                 } else {
                     getParams().getParams().get(paramId).setValue(getParams().getParams().get(paramId).getDefaultValue());
