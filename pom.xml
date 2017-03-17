@@ -30,7 +30,7 @@
         <dependency>
             <groupId>com.github.OpenLearningAnalyticsPlatform</groupId>
             <artifactId>OpenLAP-DynamicParameters</artifactId>
-            <version>268a6814bf</version>
+            <version>v1.1</version>
         </dependency>
     </dependencies>
 

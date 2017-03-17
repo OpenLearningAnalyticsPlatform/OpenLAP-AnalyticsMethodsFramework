@@ -144,6 +144,8 @@ public abstract class AnalyticsMethod {
                             params.getParams().get(paramId).setValue(additionalParams.get(paramId));
                         case INTEGER:
                             params.getParams().get(paramId).setValue(Integer.parseInt(additionalParams.get(paramId)));
+                        case FLOAT:
+                            params.getParams().get(paramId).setValue(Float.parseFloat(additionalParams.get(paramId)));
                     }
                 } else {
                     getParams().getParams().get(paramId).setValue(getParams().getParams().get(paramId).getDefaultValue());
