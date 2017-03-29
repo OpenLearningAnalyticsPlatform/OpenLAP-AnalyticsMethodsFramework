@@ -138,7 +138,7 @@ public abstract class AnalyticsMethod {
         //adding the values of the parameters in the OpenLAPDynamicParam object
         if(getParams() != null) {
             for (String paramId : getParams().getParams().keySet()) {
-                if (additionalParams.containsKey(paramId)) {
+                if (additionalParams!= null && additionalParams.containsKey(paramId)) {
                     switch (getParams().getParams().get(paramId).getDataType()) {
                         case STRING:
                             params.getParams().get(paramId).setValue(additionalParams.get(paramId));
