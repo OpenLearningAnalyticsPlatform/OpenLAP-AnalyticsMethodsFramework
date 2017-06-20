@@ -12,12 +12,7 @@ The Analytics Methods component is responsible for managing the repository of al
 </p>
 
 ## Fundamental Concepts
-The main idea behind analytics methods is to receive the incoming data in the OpenLAP-DataSet format, apply the analysis to this data and return the analyzed data in the OpenLAP-DataSet format. To implement a new analytics method, the developer must extend the abstract `AnalyticsMethod` class available in the OpenLAP-AnalyticsMethodsFramework project. In the following sub-sections the OpenLAP-DataSet and the methods of the abstract `AnalyticsMethod` class are explained in detail.
-
-### OpenLAP-DataSet
-The OpenLAP-DataSet is the internal data exchange format used in the OpenLAP. It is a modular JSON based serializable dataset to validate and exchange data between different components of the OpenLAP. Since the modular approach is used to develop the OpenLAP, different components act with relative independence from each other. Thus, a data exchange model is needed which can easily be serialized to and from JSON.
-
-The OpenLAP-DataSet is implemented under the class name `OpenLAPDataSet`. It is a collection of columns represented using the class `OpenLAPDataColumns`. Each column consists of two distinctive sections. A metadata section contains id, type, required flag, title and description of the column encapsulated in a class `OpenLAPColumnConfigData`. The second section is the data itself, represented as an array of the specified type. More details are available on the [OpenLAP-DataSet project](https://github.com/OpenLearningAnalyticsPlatform/OpenLAP-DataSet) page. Concrete examples to initialize, read from and write to OpenLAP-DataSet is given below in step by step guide to implement a new Analytics Method.
+The main idea behind analytics methods is to receive the incoming data in the OpenLAP-DataSet format, apply the analysis to this data and return the analyzed data in the OpenLAP-DataSet format. To implement a new analytics method, the developer must extend the abstract `AnalyticsMethod` class available in the OpenLAP-AnalyticsMethodsFramework project. 
 
 ### Methods of the `AnalyticsMethod` abstract class
 The `AnalyticsMethod` abstract class has a series of methods that allows new classes that extend it to be used by the OpenLAP.
