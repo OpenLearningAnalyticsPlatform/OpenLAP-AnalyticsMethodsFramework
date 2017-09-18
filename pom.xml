@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.github.OpenLearningAnalyticsPlatform</groupId>
             <artifactId>OpenLAP-DataSet</artifactId>
-            <version>v2.2</version>
+            <version>v2.3</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

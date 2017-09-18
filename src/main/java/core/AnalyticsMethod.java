@@ -5,7 +5,6 @@ import de.rwthaachen.openlap.dataset.*;
 import de.rwthaachen.openlap.dynamicparam.OpenLAPDynamicParams;
 
 import java.io.InputStream;
-import java.io.InterruptedIOException;
 import java.util.List;
 import java.util.Map;
 

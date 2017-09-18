@@ -22,10 +22,10 @@ public class AnalyticsMethodsTestImplementation extends AnalyticsMethod {
 
         try {
             this.getInput().addOpenLAPDataColumn(
-                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("inputColumn1", OpenLAPColumnDataType.STRING, true)
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("inputColumn1", OpenLAPColumnDataType.Text, true)
             );
             this.getOutput().addOpenLAPDataColumn(
-                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("outputColumn1",OpenLAPColumnDataType.INTEGER, false)
+                    OpenLAPDataColumnFactory.createOpenLAPDataColumnOfType("outputColumn1",OpenLAPColumnDataType.Numeric, false)
             );
         } catch (OpenLAPDataColumnException e) {
             e.printStackTrace();
